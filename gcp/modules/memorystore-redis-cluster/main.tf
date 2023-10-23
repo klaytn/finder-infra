@@ -8,7 +8,7 @@ resource "google_redis_cluster" "default" {
   shard_count    = var.shard_count
   replica_count  = var.replica_count
   psc_configs {
-    network = var.network
+    network = var.network_id
   }
   region = var.region
   
@@ -25,7 +25,7 @@ resource "google_network_connectivity_service_connection_policy" "default" {
   location       = var.region
   service_class  = "gcp-memorystore-redis"
   description    = "service connection policy for redis cluster"
-  network        = var.network
+  network        = var.network_id
   psc_config {
     subnetworks = var.subnetworks
   }

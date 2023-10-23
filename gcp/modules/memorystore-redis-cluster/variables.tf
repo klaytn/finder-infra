@@ -30,8 +30,8 @@ variable "replica_count" {
     type        = string
 }
 
-variable "network" {
-    description = "The network that the redis cluster will use."
+variable "network_id" {
+    description = "The id of network"
     type        = string
 }
 
