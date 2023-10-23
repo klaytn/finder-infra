@@ -15,5 +15,8 @@ module "enabled_google_apis" {
         "cloudkms.googleapis.com",
         "container.googleapis.com",
         "secretmanager.googleapis.com",
+        "redis.googleapis.com",
+        "networkconnectivity.googleapis.com",
+        "serviceconsumermanagement.googleapis.com"
     ]
 }
