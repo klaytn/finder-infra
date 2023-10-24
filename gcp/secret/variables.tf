@@ -7,3 +7,15 @@ variable "secret_data" {
     type = string
     description = "The secret data"
 }
+
+// KMS
+variable "kms_keyring" {
+    description = "Keyring name."
+    type        = string
+}
+
+variable "kms_keys" {
+    description = "Key names."
+    type        = list(string)
+    default     = []
+}
