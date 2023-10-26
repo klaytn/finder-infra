@@ -8,7 +8,7 @@ module "firewall_rules_prod" {
         description             = "Allow Ingress for SSH"
         direction               = "INGRESS"
         priority                = 1000
-        ranges                  = ["10.178.5.0/24", "10.178.6.0/24", "10.178.7.0/24", "10.178.8.0/24"]
+        ranges                  = ["10.178.0.0/24", "10.178.1.0/24", "10.178.2.0/24"]
         source_tags             = null
         source_service_accounts = null
         target_tags             = null
@@ -27,7 +27,7 @@ module "firewall_rules_prod" {
         description             = "Allow ingress for icmp"
         direction               = "INGRESS"
         priority                = 1000
-        ranges                  = ["10.178.5.0/24", "10.178.6.0/24", "10.178.7.0/24", "10.178.8.0/24"]
+        ranges                  = ["10.178.0.0/24", "10.178.1.0/24", "10.178.2.0/24"]
         source_tags             = null
         source_service_accounts = null
         target_tags             = null
