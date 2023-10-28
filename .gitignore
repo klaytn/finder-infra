@@ -6,6 +6,8 @@
 *.tfstate
 *.tfstate.*
 *.tfvars
+# gcp account secret for packer
+.gcp_account.json
 
 # Crash log files
 crash.log
