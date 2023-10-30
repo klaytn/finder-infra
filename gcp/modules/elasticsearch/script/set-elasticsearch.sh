@@ -9,21 +9,19 @@ cluster.name: ${cluster_name}
 cloud:
   gce:
     project_id: ${project_id}
-    zone: [${zones}]
+    zone: ${zones}
 discovery:
-  zen.hosts_provider: gce
+  seed_providers: gce
   
 network.host: "0.0.0.0"
 network.publish_host: "_gce:hostname_"
 
-discovery.zen.minimum_master_nodes: ${minimum_master_nodes}
-
 # only data nodes should have ingest and http capabilities
 node.roles: ${node_roles}
 xpack.security.enabled: ${security_enabled}
-xpack.monitoring.enabled: ${monitoring_enabled}
 path.data: ${elasticsearch_data_dir}
 path.logs: ${elasticsearch_logs_dir}
+bootstrap.memory_lock: true
 EOF
 
 # Set the zone for shard allocation awareness.
@@ -60,20 +58,16 @@ sudo chown -R elasticsearch:elasticsearch ${elasticsearch_logs_dir}
 sudo mkdir -p ${elasticsearch_data_dir}
 sudo chown -R elasticsearch:elasticsearch ${elasticsearch_data_dir}
 
+# Configuring system settings
+sudo sed -i '/^#session\s\+required\s\+pam_limits.so/s/^#//' /etc/pam.d/su
+sudo echo "elasticsearch  -  nofile  65535" >> /etc/security/limits.conf
+sudo echo "elasticsearch  -  nproc  4096" >> /etc/security/limits.conf
+sudo sysctl -w vm.max_map_count=262144
+
 # Start Elasticsearch
 systemctl daemon-reload
 systemctl enable elasticsearch.service
 systemctl start elasticsearch.service
-
-
-# Setup x-pack security also on Kibana configs where applicable
-if [ -f "/etc/kibana/kibana.yml" ]; then
-    echo "xpack.security.enabled: ${security_enabled}" | sudo tee -a /etc/kibana/kibana.yml
-    echo "xpack.monitoring.enabled: ${monitoring_enabled}" | sudo tee -a /etc/kibana/kibana.yml
-    systemctl daemon-reload
-    systemctl enable kibana.service
-    sudo service kibana restart
-fi
 
 sleep 60
 if [ `systemctl is-failed elasticsearch.service` == 'failed' ];
