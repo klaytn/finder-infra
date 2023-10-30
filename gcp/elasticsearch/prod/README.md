@@ -42,14 +42,14 @@ terraform init \
 ```
 
 ```bash
-terraform plan
+terraform plan -var-file terraform.tfvars
 ```
 
 ```bash
-terraform apply 
+terraform apply
 ```
 
 ### uninstallation
 ```bash
-terraform destroy 
-````
+terraform destroy
+```
