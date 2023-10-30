@@ -1,14 +1,17 @@
-module "es" {
+locals {
+  region = data.terraform_remote_state.foundation.outputs.vpc_finder_prod_subnets_regions[0]
+}
+
+module "elasticsearch" {
   source = "../../modules/elasticsearch"
-  project = var.project
+
+  project = data.terraform_remote_state.foundation.outputs.vpc_finder_name.project_id
+  region = local.region
+  zones = ["${local.region}-a", "${local.region}-b"]
+  network = data.terraform_remote_state.foundation.outputs.vpc_finder_name.network.self_link
+  subnetwork = data.terraform_remote_state.foundation.outputs.vpc_finder_prod_subnets["asia-northeast3/sb-finder-prod-shared"].id
+  
   name = var.name
-  region = var.region
-  zones = ["${var.region}-a"]
-  # zones = ["${var.region}-a", "${var.region}-b"]
   machine_type = var.machine_type
-  heap_size = var.heap_size
-  master_node = true
-  data_node = true
-  ingestion_node = true
   disk_size_gb = var.disk_size_gb
 }
