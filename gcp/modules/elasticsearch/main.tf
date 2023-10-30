@@ -4,7 +4,7 @@ resource "random_id" "this" {
 
 locals {
   computed_name = var.random_id_enabled ? "${random_id.this.hex}-${var.name}" : var.name
-  computed_cluster_name = var.random_id_enabled ? "${random_id.this.hex}-${var.cluster_name}" : var.cluster_name
+  computed_cluster_name = var.random_id_enabled ? "${random_id.this.hex}-${var.name}-cluster" : "${var.name}-cluster"
   
   set_elasticsearch_script = templatefile("script/set-elasticsearch.sh", {
     project_id = var.project
@@ -13,23 +13,9 @@ locals {
     elasticsearch_data_dir = "/var/lib/elasticsearch"
     elasticsearch_logs_dir = "/var/log/elasticsearch"
     heap_size = var.heap_size
-    minimum_master_nodes = "${format("%d", var.masters_count / 2 + 1)}"
     node_roles = var.node_roles
     security_enabled = var.security_enabled
   })
-}
-
-data "google_compute_image" "elasticsearch" {
-  family = var.image_name
-  project = var.project
-}
-
-data "google_compute_network" "default" {
-  name = var.network
-}
-
-data "google_compute_subnetwork" "default" {
-  name = var.subnetwork
 }
 
 resource "google_compute_instance_template" "default" {
