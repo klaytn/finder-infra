@@ -6,29 +6,30 @@ locals {
   computed_name = var.random_id_enabled ? "${random_id.this.hex}-${var.name}" : var.name
   computed_cluster_name = var.random_id_enabled ? "${random_id.this.hex}-${var.name}-cluster" : "${var.name}-cluster"
   
-  set_elasticsearch_script = templatefile("script/set-elasticsearch.sh", {
+  set_elasticsearch_script = templatefile("${path.module}/script/set-elasticsearch.sh", {
     project_id = var.project
-    cluster_name = locals.computed_cluster_name
-    zones = var.zones
+    cluster_name = local.computed_cluster_name
+    zones = jsonencode(var.zones)
     elasticsearch_data_dir = "/var/lib/elasticsearch"
     elasticsearch_logs_dir = "/var/log/elasticsearch"
-    node_roles = var.node_roles
+    node_roles = jsonencode(var.node_roles)
     security_enabled = var.security_enabled
   })
 }
 
 resource "google_compute_instance_template" "default" {
+  project = var.project
   name         = "elasticsearch-template"
   machine_type = var.machine_type
 
   disk {
-    source_image = data.google_compute_image.elasticsearch
+    source_image = data.google_compute_image.elasticsearch.name
     disk_size_gb = var.disk_size_gb
   }
 
   network_interface {
-    network = data.google_compute_network.default.self_link
-    subnetwork = data.google_compute_subnetwork.default.self_link
+    network = var.network
+    subnetwork = var.subnetwork
 
     # secret default
     access_config {
@@ -52,8 +53,9 @@ resource "google_compute_instance_template" "default" {
 
 # ToDo: 'node' module migrate to resource by provide google
 resource "google_compute_region_instance_group_manager" "default" {
-  name = "${locals.computed_name}-igm"
-  base_instance_name = locals.computed_name
+  project = var.project
+  name = "${local.computed_name}-igm"
+  base_instance_name = local.computed_name
   region = var.region
   distribution_policy_zones = var.zones
   target_size = 2
