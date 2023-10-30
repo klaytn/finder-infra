@@ -29,6 +29,9 @@ packer build -only=googlecompute -var-file=variables.json -var gcp_project_id=$(
 ### create tfvars
 ```bash
 `cat <<EOL > terraform.tfvars
+name = ""
+machine_type = ""
+disk_size_gb = 
 EOL`
 ```
 
