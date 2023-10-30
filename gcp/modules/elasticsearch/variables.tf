@@ -35,23 +35,6 @@ variable "zones" {
   type = list(string)
 }
 
-variable "heap_size" {
-  description = "The heap size of the elasticsearch node. (Recommend: 50% of the availabe system memory, under 32GB)"
-  type = string
-  default = "2g"
-}
-
-variable "cluster_name" {
-  description = "The cluster name of the elasticsearch cluster."
-  type = string
-}
-
-variable "masters_count" {
-  description = "Number of dedicated master nodes in the cluster, used for setting minimum master nodes."
-  type = number
-  default = 0
-}
-
 variable "node_roles" {
   description = "The elasticsearch node's roles. if you want to additional information, pleast see this document: https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html#node-roles"
   type = list(string)

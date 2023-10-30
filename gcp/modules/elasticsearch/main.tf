@@ -12,7 +12,6 @@ locals {
     zones = var.zones
     elasticsearch_data_dir = "/var/lib/elasticsearch"
     elasticsearch_logs_dir = "/var/log/elasticsearch"
-    heap_size = var.heap_size
     node_roles = var.node_roles
     security_enabled = var.security_enabled
   })
