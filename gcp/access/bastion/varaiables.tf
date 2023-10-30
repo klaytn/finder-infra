@@ -1,3 +1,8 @@
+variable "bucket" {
+    type = stirng
+    description = "terraform bucket name"
+}
+
 variable "ovpn_name" {
     type = string
     description = "open vpn name"

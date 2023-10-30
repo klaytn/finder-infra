@@ -1,19 +1,12 @@
-variable "password" {
+variable "database_password" {
   type = string
   description = "The password for the default database user"
   default = null
 }
 
-variable "region" {
-  type        = string
-  description = "The region to host the postgresql database"
-  default     = null
-}
-
-variable "zone" {
-  type        = string
-  description = "The zone for postgresql database"
-  default     = null
+variable "bucket" {
+  type = string
+  description = "Terraform state bucket"
 }
 
 variable "iam_users" {
