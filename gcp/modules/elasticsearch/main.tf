@@ -16,89 +16,69 @@ locals {
     minimum_master_nodes = "${format("%d", var.masters_count / 2 + 1)}"
     node_roles = var.node_roles
     security_enabled = var.security_enabled
-    monitoring_enabled = var.monitoring_enabled
   })
 }
 
 data "google_compute_image" "elasticsearch" {
-  family = "elasticsearch-8"
+  family = var.image_name
   project = var.project
 }
 
-resource "google_redis_cluster" "default" {
-  project        = var.project
-  name           = locals.computed_name
-  shard_count    = var.shard_count
-  replica_count  = var.replica_count
-  psc_configs {
-    network = var.network_id
-  }
-  region = var.region
-  
-  transit_encryption_mode = "TRANSIT_ENCRYPTION_MODE_DISABLED"
-  authorization_mode = "AUTH_MODE_DISABLED"
-  depends_on = [
-    google_network_connectivity_service_connection_policy.default
-  ]
+data "google_compute_network" "default" {
+  name = var.network
 }
 
-resource "google_network_connectivity_service_connection_policy" "default" {
-  project        = var.project
-  name           = var.random_id_enabled ? "${random_id.this.hex}-${var.name}-connection-policy" : "${var.name}-connection-policy"
-  location       = var.region
-  service_class  = "gcp-memorystore-redis"
-  description    = "service connection policy for redis cluster"
-  network        = var.network_id
-  psc_config {
-    subnetworks = var.subnetworks
+data "google_compute_subnetwork" "default" {
+  name = var.subnetwork
+}
+
+resource "google_compute_instance_template" "default" {
+  name         = "elasticsearch-template"
+  machine_type = var.machine_type
+
+  disk {
+    source_image = data.google_compute_image.elasticsearch
+    disk_size_gb = var.disk_size_gb
+  }
+
+  network_interface {
+    network = data.google_compute_network.default.self_link
+    subnetwork = data.google_compute_subnetwork.default.self_link
+
+    # secret default
+    access_config {
+      network_tier = "PREMIUM"
+    }
+  }
+
+  # secret default
+  service_account {
+    scopes = [
+      "https://www.googleapis.com/auth/devstorage.read_only",
+      "https://www.googleapis.com/auth/logging.write",
+      "https://www.googleapis.com/auth/monitoring.write",
+      "https://www.googleapis.com/auth/pubsub",
+      "https://www.googleapis.com/auth/service.management.readonly",
+      "https://www.googleapis.com/auth/servicecontrol",
+      "https://www.googleapis.com/auth/trace.append",
+    ]
   }
 }
 
-
-# =============
-# =============
-# =============
-
-
-
-
+# ToDo: 'node' module migrate to resource by provide google
 resource "google_compute_region_instance_group_manager" "default" {
-  name = "${var.name}-group"
-  base_instance_name = var.name
+  name = "${locals.computed_name}-igm"
+  base_instance_name = locals.computed_name
   region = var.region
   distribution_policy_zones = var.zones
+  target_size = 2
 
   version {
-    instance_template = 
+    instance_template = google_compute_instance_template.default.self_link_unique
   }
-}
 
-module "node" {
-  source                    = "GoogleCloudPlatform/managed-instance-group/google"
-  version                   = "1.1.15"
-  project                   = var.project
-  region                    = var.region
-  zonal                     = false
-  distribution_policy_zones = ["${var.zones}"]
-  network                   = "${var.network}"
-  subnetwork                = "${var.subnetwork}"
-  network_ip                = "${var.network_ip}"
-  access_config             = ["${var.access_config}"]
-  target_tags               = ["${compact(concat(list("${var.name}", "${var.cluster_name}"), var.node_tags))}"]
-  machine_type              = "${var.machine_type}"
-  name                      = "${var.name}"
-  compute_image             = "${data.google_compute_image.elasticsearch.self_link}"
-  disk_auto_delete          = "${var.disk_auto_delete}"
-  disk_type                 = "${var.disk_type}"
-  disk_size_gb              = "${var.disk_size_gb}"
-  size                      = "${var.num_nodes}"
-  service_port              = "9200"
-  service_port_name         = "http"
-  wait_for_instances        = true
-  update_strategy           = "NONE"
-  http_health_check         = false
-}
-
-data "google_compute_region_instance_group" "default" {
-  self_link = "${module.node.region_instance_group}"
+  named_port {
+    name = "elasticsearch-http"
+    port = 9200
+  }
 }
