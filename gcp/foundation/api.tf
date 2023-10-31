@@ -17,6 +17,7 @@ module "enabled_google_apis" {
         "secretmanager.googleapis.com",
         "redis.googleapis.com",
         "networkconnectivity.googleapis.com",
-        "serviceconsumermanagement.googleapis.com"
+        "serviceconsumermanagement.googleapis.com",
+        "dataproc.googleapis.com"
     ]
 }
