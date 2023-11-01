@@ -18,6 +18,7 @@ module "enabled_google_apis" {
         "redis.googleapis.com",
         "networkconnectivity.googleapis.com",
         "serviceconsumermanagement.googleapis.com",
-        "dataproc.googleapis.com"
+        "dataproc.googleapis.com",
+        "cloudresourcemanager.googleapis.com"
     ]
 }
