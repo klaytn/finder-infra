@@ -35,4 +35,4 @@ override.tf.json
 *.iml
 **/.idea/*
 .DS_Store
-.pem
+*.pem
