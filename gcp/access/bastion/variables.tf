@@ -1,5 +1,5 @@
 variable "bucket" {
-    type = stirng
+    type = string
     description = "terraform bucket name"
 }
 
