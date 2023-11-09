@@ -22,8 +22,7 @@ cloud:
 discovery:
   seed_providers: gce
   
-network.host: "0.0.0.0"
-network.publish_host: "_gce:hostname_"
+network.host: "_gce_"
 
 # only data nodes should have ingest and http capabilities
 node.roles: ${node_roles}
