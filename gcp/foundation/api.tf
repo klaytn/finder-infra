@@ -19,6 +19,8 @@ module "enabled_google_apis" {
         "networkconnectivity.googleapis.com",
         "serviceconsumermanagement.googleapis.com",
         "dataproc.googleapis.com",
-        "cloudresourcemanager.googleapis.com"
+        "cloudresourcemanager.googleapis.com",
+        "domains.googleapis.com",
+        "certificatemanager.googleapis.com"
     ]
 }
