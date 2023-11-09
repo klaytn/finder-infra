@@ -49,6 +49,10 @@ resource "google_compute_instance_template" "default" {
       "https://www.googleapis.com/auth/trace.append",
     ]
   }
+
+  metadata = {
+    startup-script = local.set_elasticsearch_script
+  }
 }
 
 # ToDo: 'node' module migrate to resource by provide google
