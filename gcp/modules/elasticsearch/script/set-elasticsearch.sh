@@ -1,9 +1,18 @@
 #!/bin/bash
 
-exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+sudo su -
+
+# Initialize
+mkdir -p /etc/systemd/system/elasticsearch.service.d
+echo '' > /etc/elasticsearch/elasticsearch.yml
+echo '' > /etc/security/limits.conf
+echo '' > /etc/systemd/system/elasticsearch.service.d/override.conf
 
 # Configure elasticsearch
+HOSTNAME=$(hostname -s)
+echo "node.name: $HOSTNAME" >> /etc/elasticsearch/elasticsearch.yml
 cat <<'EOF' >>/etc/elasticsearch/elasticsearch.yml
+action.destructive_requires_name: false
 cluster.name: ${cluster_name}
 
 cloud:
@@ -18,10 +27,14 @@ network.publish_host: "_gce:hostname_"
 
 # only data nodes should have ingest and http capabilities
 node.roles: ${node_roles}
-xpack.security.enabled: ${security_enabled}
 path.data: ${elasticsearch_data_dir}
 path.logs: ${elasticsearch_logs_dir}
 bootstrap.memory_lock: true
+
+# turn off https
+xpack.security.enabled: ${security_enabled}
+xpack.security.transport.ssl.enabled: false
+xpack.security.http.ssl.enabled: false
 EOF
 
 # Set the zone for shard allocation awareness.
@@ -29,34 +42,27 @@ ZONE=$(basename $(curl -sf -H "Metadata-Flavor: Google" http://metadata/computeM
 echo "node.attr.zone: $ZONE" >> /etc/elasticsearch/elasticsearch.yml
 
 cat <<'EOF' >>/etc/security/limits.conf
-
 # allow user 'elasticsearch' mlockall
 elasticsearch soft memlock unlimited
 elasticsearch hard memlock unlimited
 EOF
 
-sudo mkdir -p /etc/systemd/system/elasticsearch.service.d
 cat <<'EOF' >>/etc/systemd/system/elasticsearch.service.d/override.conf
 [Service]
 LimitMEMLOCK=infinity
 EOF
 
-# Setup heap size and memory locking
-sudo sed -i 's/#MAX_LOCKED_MEMORY=.*$/MAX_LOCKED_MEMORY=unlimited/' /etc/init.d/elasticsearch
-sudo sed -i 's/#MAX_LOCKED_MEMORY=.*$/MAX_LOCKED_MEMORY=unlimited/' /etc/default/elasticsearch
-
 # Storage
-sudo mkdir -p ${elasticsearch_logs_dir}
-sudo chown -R elasticsearch:elasticsearch ${elasticsearch_logs_dir}
+mkdir -p ${elasticsearch_logs_dir}
+chown -R elasticsearch:elasticsearch ${elasticsearch_logs_dir}
 
-sudo mkdir -p ${elasticsearch_data_dir}
-sudo chown -R elasticsearch:elasticsearch ${elasticsearch_data_dir}
+mkdir -p ${elasticsearch_data_dir}
+chown -R elasticsearch:elasticsearch ${elasticsearch_data_dir}
 
 # Configuring system settings
-sudo sed -i '/^#session\s\+required\s\+pam_limits.so/s/^#//' /etc/pam.d/su
-sudo echo "elasticsearch  -  nofile  65535" >> /etc/security/limits.conf
-sudo echo "elasticsearch  -  nproc  4096" >> /etc/security/limits.conf
-sudo sysctl -w vm.max_map_count=262144
+echo "elasticsearch  -  nofile  65535" >> /etc/security/limits.conf
+echo "elasticsearch  -  nproc  4096" >> /etc/security/limits.conf
+sysctl -w vm.max_map_count=262144
 
 # Start Elasticsearch
 systemctl daemon-reload
