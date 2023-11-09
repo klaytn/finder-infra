@@ -24,7 +24,7 @@ module "firewall_rules_prod" {
     },
     {
         name                    = "allow-icmp"
-        description             = "Allow ingress for icmp"
+        description             = "Allow ingress for ICMP"
         direction               = "INGRESS"
         priority                = 1000
         ranges                  = ["10.178.0.0/24", "10.178.1.0/24", "10.178.2.0/24"]
@@ -42,7 +42,7 @@ module "firewall_rules_prod" {
     },
     {
         name                    = "allow-udp"
-        description             = "Allow ingress for udp"
+        description             = "Allow ingress for UDP"
         direction               = "INGRESS"
         priority                = 1000
         ranges                  = ["10.178.0.0/24", "10.178.1.0/24", "10.178.2.0/24"]
@@ -80,7 +80,7 @@ module "firewall_rules_prod" {
     },
     {
         name                    = "allow-kafka"
-        description             = "Allow ingress for TCP"
+        description             = "Allow ingress for kafka"
         direction               = "INGRESS"
         priority                = 1000
         ranges                  = ["10.178.0.0/24", "10.178.1.0/24", "10.178.2.0/24"]
@@ -99,7 +99,7 @@ module "firewall_rules_prod" {
     },
     {
         name                    = "allow-dataproc"
-        description             = "Allow ingress for TCP"
+        description             = "Allow ingress for dataproc"
         direction               = "INGRESS"
         priority                = 1000
         ranges                  = ["10.178.0.0/24", "10.178.1.0/24", "10.178.2.0/24"]
@@ -114,5 +114,28 @@ module "firewall_rules_prod" {
         log_config = {
             metadata = "INCLUDE_ALL_METADATA"
         }
-    }]
+    },
+    {
+        name                    = "allow-elasticsearch"
+        description             = "Allow ingress for elasticsearch"
+        direction               = "INGRESS"
+        priority                = 1000
+        ranges                  = ["10.178.0.0/24", "10.178.1.0/24", "10.178.2.0/24"]
+        source_tags             = null
+        source_service_accounts = null
+        target_tags             = null
+        target_service_accounts = null
+        allow = [{
+            protocol = "tcp"
+            # 9200~9299: for REST API of elasticsearch
+            # 9300~9305: for discover each node
+            # 9300~9399: for communicate each node
+            ports    = ["9200-9400"]
+        }]
+        deny = []
+        log_config = {
+            metadata = "INCLUDE_ALL_METADATA"
+        }
+    },
+    ]
 }
