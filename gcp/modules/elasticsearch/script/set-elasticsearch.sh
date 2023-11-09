@@ -8,9 +8,17 @@ echo '' > /etc/elasticsearch/elasticsearch.yml
 echo '' > /etc/security/limits.conf
 echo '' > /etc/systemd/system/elasticsearch.service.d/override.conf
 
-# Configure elasticsearch
+# Define variables
 HOSTNAME=$(hostname -s)
+ZONE=$(basename $(curl -sf -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/zone)) 
+
+# Configure elasticsearch
 echo "node.name: $HOSTNAME" >> /etc/elasticsearch/elasticsearch.yml
+
+if [[ "$ZONE" == *"-a" ]]; then
+    echo "cluster.initial_master_nodes: [\"$HOSTNAME\"]" >> /etc/elasticsearch/elasticsearch.yml
+fi
+
 cat <<'EOF' >>/etc/elasticsearch/elasticsearch.yml
 action.destructive_requires_name: false
 cluster.name: ${cluster_name}
@@ -37,7 +45,6 @@ xpack.security.http.ssl.enabled: false
 EOF
 
 # Set the zone for shard allocation awareness.
-ZONE=$(basename $(curl -sf -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/zone)) 
 echo "node.attr.zone: $ZONE" >> /etc/elasticsearch/elasticsearch.yml
 
 cat <<'EOF' >>/etc/security/limits.conf
