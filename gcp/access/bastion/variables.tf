@@ -6,7 +6,7 @@ variable "bucket" {
 variable "ovpn_name" {
     type = string
     description = "open vpn name"
-    default = "hd-dev-ovpn"  
+    default = "finder-prod-ovpn"  
 }
 
 variable "ovpn_subnet_number" {
