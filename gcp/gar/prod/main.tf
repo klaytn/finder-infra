@@ -1,12 +1,6 @@
 locals {
   modules = {
-    "finder-base"            = "Module for finder-base",
-    "finder-api"             = "Module for finder-api",
-    "finder-compiler-api"    = "Module for finder-compiler-api",
-    "finder-oapi"            = "Module for finder-oapi",
-    "finder-worker"          = "Module for finder-worker",
-    "finder-web"             = "Module for finder-web",
-    "finder-web-nginx"       = "Module for finder-web-nginx",
+    "finder-prod"            = "Module for finder"
   }
 }
 
