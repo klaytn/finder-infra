@@ -137,5 +137,24 @@ module "firewall_rules_prod" {
             metadata = "INCLUDE_ALL_METADATA"
         }
     },
+     {
+        name                    = "allow-ennode-rpc"
+        description             = "Allow port for en-node"
+        direction               = "INGRESS"
+        priority                = 1000
+        ranges                  = ["10.178.0.0/24", "10.178.1.0/24", "10.178.2.0/24"]
+        source_tags             = null
+        source_service_accounts = null
+        target_tags             = ["finder-en-node"]
+        target_service_accounts = null
+        allow = [{
+            protocol = "tcp"
+            ports    = ["8551"]
+        }]
+        deny = []
+        log_config = {
+            metadata = "INCLUDE_ALL_METADATA"
+        }
+    },
     ]
 }

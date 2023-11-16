@@ -3,7 +3,7 @@ resource "google_compute_instance" "en_baobab" {
   name         = "finder-en-baobab-prod"
   machine_type = "e2-standard-8"
   zone         = var.zone
-  tags         = ["ssh"]
+  tags         = ["ssh", "finder-en-node"]
 
   boot_disk {
     initialize_params {
