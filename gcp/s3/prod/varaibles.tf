@@ -1,3 +1,8 @@
+variable "bucket" {
+    type = string
+    description = "terraform bucket name"
+}
+
 variable "s3_data_lake_bucket_name" {
     type = string
     description = "The name of the bucket"

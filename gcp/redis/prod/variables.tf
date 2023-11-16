@@ -12,3 +12,8 @@ variable "replica_count" {
   description = "The number of replicas."
   type = number
 }
+
+variable "bucket" {
+    type = string
+    description = "terraform bucket name"
+}

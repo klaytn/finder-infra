@@ -19,3 +19,8 @@ variable "kms_keys" {
     type        = list(string)
     default     = []
 }
+
+variable "bucket" {
+    type = string
+    description = "terraform bucket name"
+}

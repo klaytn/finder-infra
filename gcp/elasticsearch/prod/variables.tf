@@ -1,3 +1,8 @@
+variable "bucket" {
+    type = string
+    description = "terraform bucket name"
+}
+
 variable "name" {
     description = "The name of the elasticsearch node."
     type        = string
