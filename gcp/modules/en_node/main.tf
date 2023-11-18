@@ -1,14 +1,14 @@
-resource "google_compute_instance" "en_baobab" {
+resource "google_compute_instance" "en_node" {
   project      = var.project
-  name         = "finder-en-baobab-prod"
-  machine_type = "e2-standard-8"
+  name         = var.name
+  machine_type = var.machine_type
   zone         = var.zone
-  tags         = ["ssh", "finder-en-node"]
+  tags         = var.tags
 
   boot_disk {
     initialize_params {
       image         = "ubuntu-os-cloud/ubuntu-2004-lts"
-      size          = 3726
+      size          = var.disk_size_gb
     }
   }
 
