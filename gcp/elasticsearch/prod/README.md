@@ -23,7 +23,11 @@ gcloud iam service-accounts keys create .gcp_account.json --iam-account=${SA_EMA
 
 After that, build by packer
 ```bash
+# Build elasticsearch 8
 packer build -only=googlecompute -var-file=variables.json -var gcp_project_id=$(gcloud config get-value project) elasticsearch8-node.packer.json
+
+# Build elasticsearch 7
+packer build -only=googlecompute -var-file=variables.json -var gcp_project_id=$(gcloud config get-value project) elasticsearch7-node.packer.json
 ```
 
 ### create tfvars
@@ -31,14 +35,14 @@ packer build -only=googlecompute -var-file=variables.json -var gcp_project_id=$(
 `cat <<EOL > terraform.tfvars
 name = ""
 machine_type = ""
-disk_size_gb = 
+disk_size_gb =
 EOL`
 ```
 
 ### installation
 ```bash
 terraform init \
--backend-config "bucket=$TFSTATE_BUCKET_NAME" 
+-backend-config "bucket=$TFSTATE_BUCKET_NAME"
 ```
 
 ```bash
