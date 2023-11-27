@@ -62,3 +62,8 @@ variable "disk_size_gb" {
   description = "The disk size of node."
   type = number
 }
+
+variable "tags" {
+  description = "A list of tags to apply to the resources."
+  type        = list(string)
+}

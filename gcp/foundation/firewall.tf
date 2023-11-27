@@ -120,10 +120,10 @@ module "firewall_rules_prod" {
         description             = "Allow ingress for elasticsearch"
         direction               = "INGRESS"
         priority                = 1000
-        ranges                  = ["10.178.0.0/24", "10.178.1.0/24", "10.178.2.0/24"]
+        ranges                  = ["10.178.0.0/24", "10.178.1.0/24", "10.178.2.0/24", "10.150.0.0/16"]
         source_tags             = null
         source_service_accounts = null
-        target_tags             = null
+        target_tags             = ["finder-elasticsearch-prod"]
         target_service_accounts = null
         allow = [{
             protocol = "tcp"

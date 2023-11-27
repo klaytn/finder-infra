@@ -18,9 +18,10 @@ locals {
 }
 
 resource "google_compute_instance_template" "default" {
-  project = var.project
+  project      = var.project
   name         = "elasticsearch-template"
   machine_type = var.machine_type
+  tags         = var.tags
 
   disk {
     source_image = data.google_compute_image.elasticsearch.name
