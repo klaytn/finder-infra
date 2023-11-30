@@ -2,7 +2,7 @@ variable "random_id_enabled" {
   description = "Whether to enable random_id for bucket name."
   type    = bool
   default   = false
-} 
+}
 
 variable "name" {
   description = "The name of the elasticsearch cluster."

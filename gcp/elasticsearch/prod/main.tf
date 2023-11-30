@@ -14,4 +14,5 @@ module "elasticsearch" {
   name = var.name
   machine_type = var.machine_type
   disk_size_gb = var.disk_size_gb
+  image_name = var.image_name
 }

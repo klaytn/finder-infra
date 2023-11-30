@@ -17,3 +17,9 @@ variable "disk_size_gb" {
   description = "The disk size of the elasticsearch node."
   type = number
 }
+
+variable "image_name" {
+  description = "The elasticsearch version."
+  type = string
+  default = "elasticsearch-8"
+}
