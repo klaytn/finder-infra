@@ -9,6 +9,7 @@ resource "google_compute_instance" "en_node" {
     initialize_params {
       image         = "ubuntu-os-cloud/ubuntu-2004-lts"
       size          = var.disk_size_gb
+      type          = "pd-balanced"
     }
   }
 

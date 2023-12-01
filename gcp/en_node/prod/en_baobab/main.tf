@@ -1,6 +1,6 @@
-module "en-baobab" {
+module "en-node-baobab" {
     source           = "../../../modules/en_node"
-    name             = "finder-en-baobab-prod"
+    name             = "finder-en-node-baobab-prod"
     machine_type     = "e2-standard-8"
     tags             = ["ssh", "finder-en-node"]
     zone             = "${data.terraform_remote_state.foundation.outputs.vpc_finder_prod_subnets_regions[0]}-b" 
