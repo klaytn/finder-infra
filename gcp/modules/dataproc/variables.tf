@@ -14,8 +14,13 @@ variable "subnetwork" {
   type        = string
 }
 
-variable "machine_type" {
-  description = "The machine type to create."
+variable "master_machine_type" {
+  description = "The master node machine type to create."
+  type        = string
+}
+
+variable "worker_machine_type" {
+  description = "The worker node machine type to create."
   type        = string
 }
 

@@ -11,7 +11,7 @@ resource "google_dataproc_cluster" "finder-streaming-prod" {
 
     master_config {
       num_instances = var.master_num_instances
-      machine_type  = var.machine_type
+      machine_type  = var.master_machine_type
       disk_config {
         boot_disk_type    = "pd-standard"
         boot_disk_size_gb = var.boot_disk_size_gb
@@ -20,7 +20,7 @@ resource "google_dataproc_cluster" "finder-streaming-prod" {
 
     worker_config {
       num_instances    = var.worker_num_instances
-      machine_type     = var.machine_type
+      machine_type     = var.worker_machine_type
       disk_config {
         boot_disk_type    = "pd-standard"
         boot_disk_size_gb = var.boot_disk_size_gb
