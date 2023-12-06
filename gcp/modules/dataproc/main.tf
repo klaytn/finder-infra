@@ -13,7 +13,7 @@ resource "google_dataproc_cluster" "finder-streaming-prod" {
       num_instances = var.master_num_instances
       machine_type  = var.master_machine_type
       disk_config {
-        boot_disk_type    = "pd-standard"
+        boot_disk_type    = "pd-balanced"
         boot_disk_size_gb = var.boot_disk_size_gb
       }
     }
@@ -22,7 +22,7 @@ resource "google_dataproc_cluster" "finder-streaming-prod" {
       num_instances    = var.worker_num_instances
       machine_type     = var.worker_machine_type
       disk_config {
-        boot_disk_type    = "pd-standard"
+        boot_disk_type    = "pd-balanced"
         boot_disk_size_gb = var.boot_disk_size_gb
       }
     }
@@ -39,7 +39,7 @@ resource "google_dataproc_cluster" "finder-streaming-prod" {
       override_properties = {
         "spark:spark.driver.defaultJavaOptions" = "-XX:+UseG1GC -verbose:gc -XX:OnOutOfMemoryError='kill -9 %p' -Dio.netty.tryReflectionSetAccessible=true",
         "spark:spark.driver.extraJavaOptions" = "-XX:+UseG1GC -verbose:gc -XX:OnOutOfMemoryError='kill -9 %p' -Dio.netty.tryReflectionSetAccessible=true",
-        "spark:spark.dynamicAllocation.enabled" = "false",
+        "spark:spark.dynamicAllocation.enabled" = "true",
         "spark:spark.executor.defaultJavaOptions" = "-XX:+UseG1GC -verbose:gc -XX:OnOutOfMemoryError='kill -9 %p' -Dio.netty.tryReflectionSetAccessible=true",
         "spark:spark.executor.extraJavaOptions" = "-XX:+UseG1GC -verbose:gc -XX:OnOutOfMemoryError='kill -9 %p' -Dio.netty.tryReflectionSetAccessible=true",
         "spark:spark.history.fs.cleaner.enabled" = "true",
