@@ -2,7 +2,7 @@ locals {
   region = data.terraform_remote_state.foundation.outputs.vpc_finder_prod_subnets_regions[0]
 }
 
-module "elasticsearch" {
+module "elasticsearch-v2" {
   source = "../../modules/elasticsearch"
 
   project = data.terraform_remote_state.foundation.outputs.vpc_finder_name.project_id
