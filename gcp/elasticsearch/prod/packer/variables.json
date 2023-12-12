@@ -1,0 +1,6 @@
+{
+  "elasticsearch_version": "",
+  "gcp_zone": "asia-northeast3-a",
+  "gcp_project_id": "elasticsearch",
+  "gcp_account_file": ".gcp_account.json"
+}

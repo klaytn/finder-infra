@@ -1,0 +1,38 @@
+{
+  "description": "Elasticsarch Image",
+  "builders": [
+    {
+      "type": "googlecompute",
+      "account_file": "{{user `gcp_account_file`}}",
+      "project_id": "{{user `gcp_project_id`}}",
+      "source_image_family": "ubuntu-2204-lts",
+      "zone": "{{user `gcp_zone`}}",
+      "image_family": "elasticsearch-7",
+      "image_name": "elasticsearch7-{{isotime \"20060102t030405\"}}",
+      "preemptible": true,
+      "ssh_username": "ubuntu"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "update-machine.sh",
+      "execute_command": "echo '' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+    },
+    {
+      "type": "file",
+      "source": "./template/elasticsearch.yml",
+      "destination": "elasticsearch.yml"
+    },
+    {
+      "type": "shell",
+      "script": "install-elasticsearch7.sh",
+      "environment_vars": [ "ES_VERSION={{user `elasticsearch_version`}}" ],
+      "execute_command": "echo '' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
+    },
+    {
+      "type": "shell",
+      "script": "install-custom.sh"
+    }
+  ]
+}

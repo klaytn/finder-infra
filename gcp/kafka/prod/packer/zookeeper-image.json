@@ -1,0 +1,31 @@
+{
+    "builders": [
+        {
+            "type": "googlecompute",
+            "project_id": "klaytn-finder",
+            "source_image_family": "centos-7",
+            "ssh_username": "zk",
+            "zone": "asia-northeast3-a",
+            "tags": [
+                "ssh"
+            ],
+            "image_name": "packer-zoo"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "file",
+            "source": "files/zk/",
+            "destination": "/home/zk"
+        },
+        {
+            "type": "file",
+            "source": "files/telegraf/",
+            "destination": "/home/zk"
+        },
+        {
+            "type": "shell",
+            "script": "scripts/zk-setup.sh"
+        }
+    ]
+}

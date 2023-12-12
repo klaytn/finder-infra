@@ -1,11 +1,13 @@
 # Local .terraform directories
 **/.terraform/*
 **/.terraform.lock.hcl
-
+**/access/bastion/openvpn/**
 # .tfstate files
 *.tfstate
 *.tfstate.*
 *.tfvars
+# gcp account secret for packer
+.gcp_account.json
 
 # Crash log files
 crash.log
@@ -33,3 +35,4 @@ override.tf.json
 *.iml
 **/.idea/*
 .DS_Store
+*.pem
