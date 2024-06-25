@@ -28,7 +28,6 @@ resource "google_dataproc_cluster" "finder-batch-prod" {
     }
 
     preemptible_worker_config {
-        num_instances = var.preemptible_worker_num_instances  
         disk_config {
             boot_disk_type    = "pd-balanced"
             boot_disk_size_gb = var.boot_disk_size_gb

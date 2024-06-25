@@ -24,11 +24,6 @@ variable "worker_machine_type" {
   type        = string
 }
 
-variable "preemptible_worker_machine_type" {
-  description = "The preemptible worker node machine type to create."
-  type        = string
-}
-
 variable "boot_disk_size_gb" {
   description = "The size of the boot disk in GB attached to the instance."
   type        = number
@@ -45,12 +40,6 @@ variable "worker_num_instances" {
   description = "The number of worker nodes in the cluster."
   type        = number
   default     = 10
-}
-
-variable "preemptible_worker_num_instances" {
-  description = "The number of preemptible worker nodes in the cluster."
-  type        = number
-  default     = 0
 }
 
 variable "name" {

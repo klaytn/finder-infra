@@ -6,9 +6,9 @@ module "dataproc" {
     master_machine_type     = "e2-highmem-16"
     worker_machine_type     = "e2-standard-4"
     name                    = "finder-streaming-prod"
-    tags                    = ["finder-streaming-prod"]
-    image_version           = "2.0.82-debian10"
-    boot_disk_size_gb       = 130
+    tags                    = ["finder-streaming-prod", "dataproc"]
+    image_version           = "2.2-debian12"
+    boot_disk_size_gb       = 100
     master_num_instances    = 1
-    worker_num_instances    = 10
+    worker_num_instances    = 20
 }
